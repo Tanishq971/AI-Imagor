@@ -20,18 +20,18 @@ class Database {
     if (this.cached.conn) {
       return this.cached.conn;
     }
-
+    
     if (!MONGODB_URL) throw new Error('Missing MONGODB_URL');
 
     this.cached.promise =
       this.cached.promise ||
       mongoose.connect(MONGODB_URL, {
-        dbName: 'imaginify',
+        dbName: 'imagify',
         bufferCommands: false,
       });
 
     this.cached.conn = await this.cached.promise;
-
+    console.log("connected to Database....")
     return this.cached.conn;
   }
 }
