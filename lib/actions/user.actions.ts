@@ -3,13 +3,13 @@
 import { revalidatePath } from "next/cache";
 
 import User from "../database/models/user.model";
-import { connectToDatabase } from "../database/mongoose";
+import Database from "../database/mongoose";
 import { handleError } from "../utils";
 
 // CONTROLLER FOR CREATING A NEW USER
 export async function createUser(user: CreateUserParams) {
   try {
-    await connectToDatabase();
+    await Database.connectToDatabase();
 
     const newUser = await User.create(user);
 
@@ -22,7 +22,7 @@ export async function createUser(user: CreateUserParams) {
 // fetching the user data using the user id
 export async function getUserById(userId: string) {
   try {
-    await connectToDatabase();
+    await Database.connectToDatabase();
 
     const user = await User.findOne({ clerkId: userId });
 
@@ -37,7 +37,7 @@ export async function getUserById(userId: string) {
 // updating the user data
 export async function updateUser(clerkId: string, user: UpdateUserParams) {
   try {
-    await connectToDatabase();
+    await Database.connectToDatabase();
 
     const updatedUser = await User.findOneAndUpdate({ clerkId }, user, {
       new: true,
@@ -54,7 +54,7 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
 // delete user action
 export async function deleteUser(clerkId: string) {
   try {
-    await connectToDatabase();
+    await Database.connectToDatabase();
 
    
     const userToDelete = await User.findOne({ clerkId });
@@ -75,7 +75,7 @@ export async function deleteUser(clerkId: string) {
 //for updaitng user credits
 export async function updateCredits(userId: string, creditFee: number) {
     try {
-      await connectToDatabase();
+      await Database.connectToDatabase();
   
       const updatedUserCredits = await User.findOneAndUpdate(
         { _id: userId },
