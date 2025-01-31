@@ -131,25 +131,28 @@ export const download = (url: string, filename: string) => {
 };
 
 // DEEP MERGE OBJECTS
-export const deepMergeObjects = (obj1: any, obj2: any) => {
-  if(obj2 === null || obj2 === undefined) {
-    return obj1;
-  }
+export const deepMergeObjects = <T extends Record<string, any>>(
+  obj1: T,
+  obj2: Partial<T>
+): T => {
+  if (!obj2) return obj1;
 
-  let output = { ...obj2 };
+  let output = { ...obj1 } as T;
 
-  for (let key in obj1) {
-    if (obj1.hasOwnProperty(key)) {
-      if (
-        obj1[key] &&
-        typeof obj1[key] === "object" &&
-        obj2[key] &&
-        typeof obj2[key] === "object"
-      ) {
-        output[key] = deepMergeObjects(obj1[key], obj2[key]);
-      } else {
-        output[key] = obj1[key];
-      }
+  // Type assertion for Object.keys() to string[] explicitly
+  for (const key of Object.keys(obj2) as Array<keyof T>) {
+    if (
+      obj1[key] &&
+      typeof obj1[key] === "object" &&
+      obj2[key] &&
+      typeof obj2[key] === "object"
+    ) {
+      output[key] = deepMergeObjects(
+        obj1[key] as T[keyof T],
+        obj2[key] as T[keyof T]
+      ) as T[keyof T];
+    } else {
+      output[key] = obj2[key] as T[keyof T]; // Fix: cast it as T[keyof T]
     }
   }
 

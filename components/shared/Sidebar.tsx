@@ -5,7 +5,6 @@ import Link from "next/link";
 import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/nextjs";
 import { navLinks } from "@/constants";
 import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
 
 const Sidebar = () => {
   const pathname = usePathname();
