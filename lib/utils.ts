@@ -163,38 +163,32 @@ export const download = (url: string, filename: string) => {
 
 
 // Ensure proper type for obj1 and obj2 instead of using 'any'
-export const deepMergeObjects = <T extends Record<string, unknown>>(
-  obj1: T,
-  obj2: Partial<T>
-): T => {
-  if (!obj2) return obj1;
+export const deepMergeObjects = (obj1: any, obj2: any) => {
+  if(obj2 === null || obj2 === undefined) {
+    return obj1;
+  }
 
-  const output = { ...obj1 } as T;  // Use 'const' here since 'output' is not reassigned
+  let output = { ...obj2 };
 
-  // Ensure key type is correctly defined
-  for (const key of Object.keys(obj2) as Array<keyof T>) {
-    const obj1Value = obj1[key];
-    const obj2Value = obj2[key];
-
-    // Ensure obj1Value and obj2Value are objects before recursive merge
-    if (
-      obj1Value &&
-      typeof obj1Value === "object" &&
-      obj2Value &&
-      typeof obj2Value === "object"
-    ) {
-      // Correctly type the recursive call
-      output[key] = deepMergeObjects(obj1Value as Record<string, unknown>, obj2Value as Record<string, unknown>) as T[keyof T];
-    } else {
-      // Direct assignment for non-objects
-      output[key] = obj2Value as T[keyof T];
+  for (let key in obj1) {
+    if (obj1.hasOwnProperty(key)) {
+      if (
+        obj1[key] &&
+        typeof obj1[key] === "object" &&
+        obj2[key] &&
+        typeof obj2[key] === "object"
+      ) {
+        output[key] = deepMergeObjects(obj1[key], obj2[key]);
+      } else {
+        output[key] = obj1[key];
+      }
     }
   }
 
   return output;
 };
 
-// Replacing .apply() with spread operator
+
 export const debounce = (func: (...args: unknown[]) => void, delay: number) => {
   let timeoutId: NodeJS.Timeout | null;
   return (...args: unknown[]) => {

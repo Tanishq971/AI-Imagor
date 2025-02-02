@@ -15,7 +15,8 @@ export async function createUser(user: CreateUserParams) {
 
     return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
-    handleError(error);
+    // handleError(error);
+    console.log("erro occured at user action" , error)
   }
 }
 

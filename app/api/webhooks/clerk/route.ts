@@ -18,10 +18,9 @@ export async function POST(req: Request) {
 
   // Get the headers
   const headerPayload = await headers();
-  console.log(headerPayload)
-  const svix_id = headerPayload.get("svix-id");
-  const svix_timestamp = headerPayload.get("svix-timestamp");
-  const svix_signature = headerPayload.get("svix-signature");
+  const svix_id = headerPayload.get("svix-id") || "";
+  const svix_timestamp = headerPayload.get("svix-timestamp") || "";
+  const svix_signature = headerPayload.get("svix-signature") || "";
 
   // let svix_id  = ""
   // let svix_timestamp  = ""
@@ -61,11 +60,12 @@ export async function POST(req: Request) {
   // Get the ID and type
   const { id } = evt.data;
   const eventType = evt.type;
+  console.log("ckerk id :" , id);
 
   // CREATE
   if (eventType === "user.created") {
     const { id, email_addresses, image_url, first_name, last_name, username } = evt.data;
-
+    
     const user = {
       clerkId: id,
       email: email_addresses[0].email_address,
